@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
+import { useAppFonts } from './hooks/useFonts';
+import { useEffect } from 'react';
+import ProfileCard from './components/ProfileCard';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const useFontsLoaded = useAppFonts();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(() => {
+    if(useFontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [useFontsLoaded])
+
+  if(!useFontsLoaded) {
+    return null;
+  }
+
+  return <ProfileCard />
+}
