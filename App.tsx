@@ -1,22 +1,38 @@
-import * as SplashScreen from 'expo-splash-screen';
-import { useAppFonts } from './hooks/useFonts';
-import { useEffect } from 'react';
-import ProfileCard from './components/ProfileCard';
+import * as SplashScreen from "expo-splash-screen";
+import { useAppFonts } from "./hooks/useFonts";
+import { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import ProfileCard from "./components/ProfileCard";
+import { Colors } from "./consts/colors";
+import Favorites from "./components/Favorites";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const useFontsLoaded = useAppFonts();
+  const fontsLoaded = useAppFonts();
 
   useEffect(() => {
-    if(useFontsLoaded) {
+    if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [useFontsLoaded])
+  }, [fontsLoaded]);
 
-  if(!useFontsLoaded) {
+  if (!fontsLoaded) {
     return null;
   }
 
-  return <ProfileCard />
+  return (
+    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+      <ProfileCard />
+      <Favorites />
+    </SafeAreaView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+});

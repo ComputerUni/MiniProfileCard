@@ -1,10 +1,21 @@
-import { Image, ImageBackground, StyleSheet, Text, Animated } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  Animated,
+  Pressable,
+  View,
+} from "react-native";
 import { Colors } from "../consts/colors";
-import { s } from "react-native-size-matters";
-import { useEffect, useRef } from "react";
+import { s, vs } from "react-native-size-matters";
+import React, { useEffect, useRef } from "react";
+import Entypo from "@expo/vector-icons/Entypo";
 
-export default function ProfileCard() {
+interface ProfileCardProps {
+  onEdit?: () => void;
+}
+
+export default function ProfileCard({ onEdit }: ProfileCardProps) {
   const spinValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -13,7 +24,7 @@ export default function ProfileCard() {
         toValue: 1,
         duration: 4000,
         useNativeDriver: true,
-      })
+      }),
     ).start();
   }, []);
 
@@ -23,7 +34,7 @@ export default function ProfileCard() {
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+    <View style={styles.container}>
       <ImageBackground
         style={styles.bg}
         source={require("../assets/soft-blue.jpeg")}
@@ -34,31 +45,28 @@ export default function ProfileCard() {
         />
         <Text style={styles.subtitle}>Mehmet Kadir Güngör</Text>
         <Text style={styles.role}>Bilgisayar Mühendisi</Text>
+        <Pressable style={styles.button} onPress={onEdit}>
+          <Entypo name="edit" size={s(20)} color={Colors.textDark} />
+          <Text style={styles.profileText}>Profili Düzenle</Text>
+        </Pressable>
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
   },
   bg: {
     flex: 1,
     padding: s(20),
   },
-  title: {
-    fontFamily: "Raleway_700Bold",
-    fontSize: s(24),
-    marginTop: s(10),
-    color: Colors.textLight,
-  },
   avatar: {
     width: s(100),
     height: s(100),
     borderRadius: s(50),
-    marginTop: s(20),
+    marginTop: vs(20),
     alignSelf: "center",
     borderWidth: 3,
     borderColor: Colors.border,
@@ -70,12 +78,29 @@ const styles = StyleSheet.create({
     color: Colors.text,
     alignSelf: "center",
   },
-
   role: {
     fontFamily: "Raleway_400Regular",
     fontSize: s(13),
     color: Colors.textLight,
     alignSelf: "center",
-    marginTop: s(4),
+    marginTop: vs(4),
+  },
+  button: {
+    marginTop: vs(16),
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.accent,
+    paddingVertical: vs(10),
+    paddingHorizontal: s(24),
+    borderRadius: s(20),
+    minWidth: s(200),
+    alignSelf: "center",
+  },
+  profileText: {
+    marginLeft: s(10),
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: s(13),
+    color: Colors.textDark,
   },
 });
