@@ -9,14 +9,38 @@ import {
 import { Colors } from "../consts/colors";
 import { s, vs } from "react-native-size-matters";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-import Feather from '@expo/vector-icons/Feather';
+import Feather from "@expo/vector-icons/Feather";
+import { useState } from "react";
 
 interface ProfileModalProps {
   visible: boolean;
   onClose: () => void;
+  profile: {
+    name: string;
+    role: string;
+    linkedin: string;
+    github: string;
+  };
+  onSave: (newProfile: {
+    name: string;
+    role: string;
+    linkedin: string;
+    github: string;
+  }) => void;
 }
 
-export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
+export default function ProfileModal({
+  visible,
+  onClose,
+  profile,
+  onSave,
+}: ProfileModalProps) {
+  const [form, setForm] = useState({
+    name: profile.name,
+    role: profile.role,
+    linkedin: profile.linkedin,
+    github: profile.github,
+  });
   return (
     <View style={styles.container}>
       <Modal animationType="slide" style={styles.modal} visible={visible}>
@@ -29,18 +53,36 @@ export default function ProfileModal({ visible, onClose }: ProfileModalProps) {
         />
         <View style={styles.inputContainer}>
           <TextInput
+            value={form.name}
+            onChangeText={(text) => setForm({ ...form, name: text })}
             placeholder="Adınız Soyadınız"
             placeholderTextColor={Colors.primary}
             style={styles.textInput}
           />
           <TextInput
+            value={form.role}
+            onChangeText={(text) => setForm({ ...form, role: text })}
             placeholder="Mesleğiniz veya Açıklamanız"
+            placeholderTextColor={Colors.primary}
+            style={styles.textInput}
+          />
+          <TextInput
+            value={form.linkedin}
+            onChangeText={(text) => setForm({ ...form, linkedin: text })}
+            placeholder="Linkedin Linkiniz"
+            placeholderTextColor={Colors.primary}
+            style={styles.textInput}
+          />
+          <TextInput
+            value={form.github}
+            onChangeText={(text) => setForm({ ...form, github: text })}
+            placeholder="GitHub Linkiniz"
             placeholderTextColor={Colors.primary}
             style={styles.textInput}
           />
         </View>
         <View>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={() => onSave(form)}>
             <Feather name="save" size={s(20)} color={Colors.accent} />
             <Text style={styles.profileText}>Kaydet</Text>
           </Pressable>

@@ -1,21 +1,28 @@
-import {
-
-  StyleSheet,
-  Text,
-  Animated,
-  Pressable,
-  View,
-} from "react-native";
+import { StyleSheet, Text, Animated, Pressable, View } from "react-native";
 import { Colors } from "../consts/colors";
 import { s, vs } from "react-native-size-matters";
 import { useEffect, useRef, useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import ProfileModal from "./ProfileModal";
 
+interface ProfileCardProps {
+  profile: {
+    name: string;
+    role: string;
+    linkedin: string;
+    github: string;
+  };
+  onSave: (newProfile: {
+    name: string;
+    role: string;
+    linkedin: string;
+    github: string;
+  }) => void;
+}
 
-
-export default function ProfileCard() {
+export default function ProfileCard({ profile, onSave }: ProfileCardProps) {
   const [modalVisible, setModalVisible] = useState(false);
+
   const spinValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -39,13 +46,21 @@ export default function ProfileCard() {
         style={[styles.avatar, { transform: [{ rotateY: spin }] }]}
         source={require("../assets/profile.jpeg")}
       />
-      <Text style={styles.subtitle}>Mehmet Kadir Güngör</Text>
-      <Text style={styles.role}>Bilgisayar Mühendisi</Text>
+      <Text style={styles.subtitle}>{profile.name || "Adınız Soyadınız"}</Text>
+      <Text style={styles.role}>{profile.role || "Mesleğiniz"}</Text>
       <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
         <Entypo name="edit" size={s(20)} color={Colors.accent} />
         <Text style={styles.profileText}>Profili Düzenle</Text>
       </Pressable>
-      <ProfileModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+      <ProfileModal
+        profile={profile}
+        onSave={(newProfile) => {
+          onSave(newProfile);
+          setModalVisible(false);
+        }}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 }

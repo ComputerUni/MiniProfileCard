@@ -9,31 +9,39 @@ import { s, vs } from "react-native-size-matters";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const buttons = [
-  {
-    label: "LinkedIn",
-    icon: <FontAwesome name="linkedin" size={s(20)} color="#0A66C2" />,
-    color: "#0A66C2",
-    bg: "#E8F0FE",
-    url: "https://www.linkedin.com/in/mehmet-kadir-güngör-33091826a",
-  },
-  {
-    label: "GitHub",
-    icon: <FontAwesome name="github" size={s(20)} color="#ffffff" />,
-    color: "#ffffff",
-    bg: "#24292E",
-    url: "https://github.com/ComputerUni",
-  },
-  {
-    label: "CV İndir",
-    icon: <Feather name="download" size={s(20)} color="#10B981" />,
-    color: "#10B981",
-    bg: "#D1FAE5",
-    url: "https://cv-linkin-buraya",
-  },
-];
+interface ProfileButtonsProps {
+  linkedin: string;
+  github: string;
+}
 
-export default function ProfileButtons() {
+export default function ProfileButtons({
+  linkedin,
+  github,
+}: ProfileButtonsProps) {
+  const buttons = [
+    {
+      label: "LinkedIn",
+      icon: <FontAwesome name="linkedin" size={s(20)} color="#0A66C2" />,
+      color: "#0A66C2",
+      bg: "#E8F0FE",
+      url: linkedin || "https://linkedin.com",
+    },
+    {
+      label: "GitHub",
+      icon: <FontAwesome name="github" size={s(20)} color="#ffffff" />,
+      color: "#ffffff",
+      bg: "#24292E",
+      url: github || "https://linkedin.com",
+    },
+    {
+      label: "CV İndir",
+      icon: <Feather name="download" size={s(20)} color="#10B981" />,
+      color: "#10B981",
+      bg: "#D1FAE5",
+      url: "https://cv-linkin-buraya",
+    },
+  ];
+
   return (
     <View style={styles.buttonContainer}>
       {buttons.map((btn) => (
@@ -55,7 +63,7 @@ export default function ProfileButtons() {
 const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
-    marginTop: vs(30)
+    marginTop: vs(30),
   },
   button: {
     marginTop: vs(10),
